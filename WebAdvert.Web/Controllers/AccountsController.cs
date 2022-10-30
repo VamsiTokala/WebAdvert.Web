@@ -6,13 +6,13 @@ using WebAdvert.Web.Models.Accounts;
 
 namespace WebAdvert.Web.Controllers
 {
-    public class Accounts : Controller
+    public class AccountsController : Controller
     {
         public readonly SignInManager<CognitoUser> _signInManager;
         public readonly UserManager<CognitoUser> _userManager;
         public readonly CognitoUserPool _pool;
 
-        public Accounts(SignInManager<CognitoUser> signInManager, UserManager<CognitoUser> userManager, CognitoUserPool pool)
+        public AccountsController(SignInManager<CognitoUser> signInManager, UserManager<CognitoUser> userManager, CognitoUserPool pool)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -57,10 +57,55 @@ namespace WebAdvert.Web.Controllers
                 {
                     //if created user succeed succeeded, then we can say a direct to page ConfrimPassword or Redirect to action with actionMName "confirm"
                     //RedirectToPage("./ConfirmPassword");
-                    RedirectToAction("Confirm");
+                    return RedirectToAction("Confirm");
                 }
             }
-            return View();
+            return View(model);
         }
+
+        //Confirm methods
+        [HttpGet]
+        //public  IActionResult Confirm(ConfirmModel model)// if you want to reload the page like confirmation code is invalid then pass parameter COnfrim Model model
+        public async Task<IActionResult> Confirm(ConfirmModel model)
+        {
+            return View(model);
+
+        }
+        [HttpPost]
+        [ActionName("Confirm")]
+        //one for post ConfirmModel
+        public async Task<IActionResult> ConfirmPost(ConfirmModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("NotFound", "A usr with the given email address was not found");
+                    return View(model);
+                }
+               // var result = await _userManager.ConfirmEmailAsync(user, model.Code);
+                var result = await ((CognitoUserManager<CognitoUser>)_userManager)
+                    .ConfirmSignUpAsync(user, model.Code, true).ConfigureAwait(false);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    foreach(var item in result.Errors)
+                    {
+                        ModelState.AddModelError(item.Code, item.Description);
+                    }
+                    return View(model);
+
+                }
+            }
+            return View(model);
+        }
+
+
+
+
     }
 }

@@ -17,8 +17,8 @@ namespace WebAdvert.Web.Models.Accounts
 
         [Required]
         [DataType(DataType.Password)] // for password type we need to use this
-        [Compare("password", ErrorMessage ="Password and its confirmation do not match")]
-        [Display(Name = "Password")]
+        [Compare("Password", ErrorMessage ="Password and its confirmation do not match")]
+        [Display(Name = "ConfirmPassword")]
         public string ConfirmPassword { get; set; }
     }
 }
