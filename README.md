@@ -1,3 +1,3 @@
 # WebAdvert.Web
 
-Event-Driven Microservices with .NET and AWS, Lambda, API Gateway, Kafka, RabbitMQ, etc.
+Event-Driven Microservices with .NETCore 6.0 and AWS, Lambda, API Gateway, Kafka, RabbitMQ, etc.
