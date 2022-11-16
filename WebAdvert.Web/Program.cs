@@ -2,12 +2,14 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using WebAdvert.Web.ServiceClients;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddCognitoIdentity();
+builder.Services.AddHttpClient<IAdvertApiClient, AdvertApiClient>();
 
 
 /*builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
