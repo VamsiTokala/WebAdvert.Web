@@ -9,6 +9,7 @@ namespace WebAdvert.Web.ServiceClients
         * for CreateAdvertResponse with the same structure
         * for AdvertModel with the same structure
        */
-        Task<AdvertResponse> Create(CreateAdvertModel model);
+         Task<AdvertResponse> Create(CreateAdvertModel model);
+        Task<bool> Confirm(ConfirmAdvertRequest model);
     }
 }
